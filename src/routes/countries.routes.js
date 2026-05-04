@@ -1,11 +1,14 @@
 const {Router} = require("express");
-const { getCountries, createCountry, updateCountry, deleteCountry } = require("../controllers/countries.controller");
+const { getCountries, getCountryById, createCountry, updateCountry, deleteCountry } = require("../controllers/countries.controller");
+const { verifyJWT } = require("../middlewares/verifyJWT");
+const { verifyAdminRole } = require("../middlewares/verifyAdminRole");
 const router = Router();
 
-router.get("/", getCountries);
+router.get("/", [verifyJWT], getCountries);
+router.get("/:id", [verifyJWT, verifyAdminRole], getCountryById);
 router.post("/", createCountry);
-router.put("/", updateCountry);
-router.delete("/", deleteCountry);
+router.put("/:id", updateCountry);
+router.delete("/:id", deleteCountry);
 
 
 module.exports = router;
